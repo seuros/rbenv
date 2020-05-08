@@ -19,7 +19,8 @@ namespace :rbenv do
     rbenv_prefix = fetch(:rbenv_prefix, proc { "#{fetch(:rbenv_path)}/bin/rbenv exec" })
     SSHKit.config.command_map[:rbenv] = "#{fetch(:rbenv_path)}/bin/rbenv"
 
-    fetch(:rbenv_map_bins).uniq.each do |command|
+    map_bins = Array(fetch(:ruby_map_bins)) + Array(fetch(:rbenv_map_bins))
+    map_bins.uniq.each do |command|
       SSHKit.config.command_map.prefix[command.to_sym].unshift(rbenv_prefix)
     end
   end
@@ -44,6 +45,6 @@ namespace :load do
     set :rbenv_roles, fetch(:rbenv_roles, :all)
 
     set :rbenv_ruby_dir, -> { "#{fetch(:rbenv_path)}/versions/#{fetch(:rbenv_ruby)}" }
-    set :rbenv_map_bins, %w{rake gem bundle ruby rails}
+    set :ruby_map_bins, %w{rake gem bundle ruby rails}
   end
 end
